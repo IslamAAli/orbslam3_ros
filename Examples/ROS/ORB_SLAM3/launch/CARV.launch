@@ -1,0 +1,7 @@
+<launch>
+    <!-- Node Definition -->
+    <node name="Mono" pkg="ORB_CARV_Pub" type="Mono" output="screen" args="Vocabulary/ORBvoc.txt config_files/Logitech_c270_HD720p.yaml">
+        <!-- Topic Remapping -->
+        <remap from="/camera/image_raw" to="/usb_cam/image_raw"/>
+    </node>
+</launch>
