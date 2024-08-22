@@ -7,6 +7,8 @@
 # Unignore all dirs
 !*/
 
+
+
 CMakeLists.txt.user
 CMakeLists_modified.txt
 
@@ -91,3 +93,27 @@ my_settings.txt
 borrar/*
 
 */ExecMean.txt
+
+# build folders
+build/*
+Thirdparty/DBoW2/build/*
+Thirdparty/g2o/build/*
+Examples/ROS/ORB_CARV_Pub/build/*
+
+# large files
+Vocabulary/*
+tools/*
+
+#vs code files
+.vscode/*
+
+# exceptions
+!Thirdparty/DBoW2/DUtils/Timestamp.cpp
+!Thirdparty/DBoW2/DUtils/Timestamp.h
+!Thirdparty/g2o/g2o/stuff/timeutil.cpp
+!Thirdparty/g2o/g2o/stuff/timeutil.h
+!Thirdparty/EDLines/Makefile
+!Thirdparty/EDLines/Timer.h
+!tools/bin_vocabulary
+!tools/bin_vocabulary.cc
+!Dockerfile
