@@ -5,10 +5,19 @@ IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE Release)
 ENDIF()
 
+# ========== CARV ==========
+# set flags needed for CARV
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+
+# set carv needed flags
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__STDC_CONSTANT_MACROS -DGL_GLEXT_PROTOTYPES -D_LINUX -D_REENTRANT -DCGAL_USE_F2C -DCGAL_DISABLE_ROUNDING_MATH_CHECK")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__STDC_CONSTANT_MACROS -DGL_GLEXT_PROTOTYPES -D_LINUX -D_REENTRANT -DCGAL_USE_F2C -DCGAL_DISABLE_ROUNDING_MATH_CHECK")
+
 # suppress all warnings for cleaner build
 add_definitions(-w)
 add_definitions(-Wno-deprecated)
 add_definitions(-Wno-int-in-bool-context)
+# ========== CARV ==========
 
 MESSAGE("Build type: " ${CMAKE_BUILD_TYPE})
 
@@ -17,21 +26,24 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
 
-# Check C++11 or C++0x support
+# Check C++14 or C++0x support
 include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX11)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-   add_definitions(-DCOMPILEDWITHC11)
-   message(STATUS "Using flag -std=c++11.")
+if(COMPILER_SUPPORTS_CXX14)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+   add_definitions(-DCOMPILEDWITHC14)
+   message(STATUS "Using flag -std=c++14.")
 elseif(COMPILER_SUPPORTS_CXX0X)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
    add_definitions(-DCOMPILEDWITHC0X)
    message(STATUS "Using flag -std=c++0x.")
 else()
-   message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+   message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support. Please use a different C++ compiler.")
 endif()
+# ========== CARV ==========
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# ========== CARV ==========
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 
@@ -47,6 +59,22 @@ find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
 find_package(realsense2)
 
+# ========== CARV ==========
+# Find CGAL
+set(CMAKE_BUILD_TYPE_BACKUP ${CMAKE_BUILD_TYPE})
+set(CMAKE_BUILD_TYPE "Release")
+find_package(CGAL REQUIRED COMPONENTS Core)
+include( ${CGAL_USE_FILE} )
+set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE_BACKUP})
+# Find Boost
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIR})
+# BLAS and LAPACK
+find_package(LAPACK REQUIRED)
+link_directories(${LAPACK_LIBRARY_DIR})
+# ========== CARV ==========
+
 include_directories(
 ${PROJECT_SOURCE_DIR}
 ${PROJECT_SOURCE_DIR}/include
@@ -54,6 +82,10 @@ ${PROJECT_SOURCE_DIR}/include/CameraModels
 ${PROJECT_SOURCE_DIR}/Thirdparty/Sophus
 ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
+# ========== CARV ==========
+${PROJECT_SOURCE_DIR}/Thirdparty/Line3Dpp
+${PROJECT_SOURCE_DIR}/Thirdparty/Line3Dpp/build
+# ========== CARV ==========
 )
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
@@ -87,6 +119,21 @@ src/GeometricTools.cc
 src/TwoViewReconstruction.cc
 src/Config.cc
 src/Settings.cc
+# ========== CARV ==========
+src/Modeler/converters.cpp
+src/Modeler/FreespaceDelaunayAlgorithm.cc
+src/Modeler/GraphWrapper_Boost.cc
+src/Modeler/lovimath.cc
+src/Modeler/SFMTranscript.cpp
+src/Modeler/SFMTranscriptInterface_Delaunay.cpp
+src/Modeler/Matrix.cc
+src/Modeler/StringFunctions.cpp
+src/Modeler/Exception.cpp
+src/Modeler/SFMTranscriptInterface_ORBSLAM.cpp
+src/Modeler/Modeler.cc
+src/Modeler/ModelDrawer.cc
+src/Modeler/TextureFrame.cc
+# ========== CARV ==========
 include/System.h
 include/Tracking.h
 include/LocalMapping.h
@@ -128,4 +175,8 @@ ${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.so
 ${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.so
 -lboost_serialization
 -lcrypto
+# ========== CARV ==========
+${PROJECT_SOURCE_DIR}/Thirdparty/EDLines/EDLinesLib.a
+lapack blas
+# ========== CARV ==========
 )
