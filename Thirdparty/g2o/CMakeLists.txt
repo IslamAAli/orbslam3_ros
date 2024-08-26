@@ -11,6 +11,10 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
+add_definitions(-w)
+add_definitions(-Wno-deprecated)
+add_definitions(-Wno-int-in-bool-context)
+
 MESSAGE(STATUS "BUILD TYPE:" ${CMAKE_BUILD_TYPE})
 
 SET (G2O_LIB_TYPE SHARED)
