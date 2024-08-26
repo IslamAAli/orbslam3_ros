@@ -113,6 +113,9 @@ public:
 
     void SetWorldPos(const Eigen::Vector3f &Pos);
     Eigen::Vector3f GetWorldPos();
+    //======== CARV =======
+    cv::Mat GetWorldPosCV();
+    //======== CARV =======
 
     Eigen::Vector3f GetNormal();
     void SetNormalVector(const Eigen::Vector3f& normal);

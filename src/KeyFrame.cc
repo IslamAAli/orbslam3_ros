@@ -1156,4 +1156,166 @@ void KeyFrame::SetKeyFrameDatabase(KeyFrameDatabase* pKFDB)
     mpKeyFrameDB = pKFDB;
 }
 
+
+// ========== CARV ==========
+// TODO: check if it works correctly
+cv::Mat KeyFrame::TransformPointWtoC(cv::Mat Pw){
+    // Extract rotation (Rcw) and translation (tcw) from mTcw
+    Eigen::Matrix3f Rcw = mTcw.rotationMatrix();
+    Eigen::Vector3f tcw = mTcw.translation();
+
+    // Convert Pw from cv::Mat to Eigen::Vector3f
+    Eigen::Vector3f Pw_eigen;
+    Pw_eigen << Pw.at<float>(0), Pw.at<float>(1), Pw.at<float>(2);
+
+    // Compute the 3D point in the camera coordinate system
+    Eigen::Vector3f Pc_eigen = Rcw * Pw_eigen + tcw;
+
+    // Convert Pc_eigen to cv::Mat
+    cv::Mat Pc(3, 1, CV_32F);
+    Pc.at<float>(0) = Pc_eigen(0);
+    Pc.at<float>(1) = Pc_eigen(1);
+    Pc.at<float>(2) = Pc_eigen(2);
+
+    return Pc;
+}
+
+cv::Point2f KeyFrame::ProjectPointOnCamera(cv::Mat Pw){
+    cv::Point2f xy;
+
+    // Extract rotation (Rcw) and translation (tcw) from mTcw
+    Eigen::Matrix3f Rcw = mTcw.rotationMatrix();
+    Eigen::Vector3f tcw = mTcw.translation();
+
+    // Convert Pw from cv::Mat to Eigen::Vector3f
+    Eigen::Vector3f Pw_eigen;
+    Pw_eigen << Pw.at<float>(0), Pw.at<float>(1), Pw.at<float>(2);
+
+    // Compute the 3D point in the camera coordinate system
+    Eigen::Vector3f Pc_eigen = Rcw * Pw_eigen + tcw;
+
+    // Convert Pc_eigen to cv::Mat
+    cv::Mat Pc(3, 1, CV_32F);
+    Pc.at<float>(0) = Pc_eigen(0);
+    Pc.at<float>(1) = Pc_eigen(1);
+    Pc.at<float>(2) = Pc_eigen(2);
+
+    float &PcX = Pc.at<float>(0);
+    float &PcY = Pc.at<float>(1);
+    float &PcZ = Pc.at<float>(2);
+    // Project in image and check it is not outside
+    float invz = 1.0f / PcZ;
+    float x = fx * PcX * invz + cx;
+    float y = fy * PcY * invz + cy;
+    if (PcZ > 0 && IsInImage(x,y)){
+        xy.x = x;
+        xy.y = y;
+    } else {
+        xy.x = -1;
+        xy.y = -1;
+    }
+    return xy;
+}
+
+//TODO: Check this constructor is it covering everything or not
+KeyFrame::KeyFrame(KeyFrame *pKF): 
+      mnId(pKF->mnId), 
+      mnFrameId(pKF->mnFrameId),
+      mTimeStamp(pKF->mTimeStamp),
+      mnGridCols(pKF->mnGridCols),
+      mnGridRows(pKF->mnGridRows),
+      mfGridElementWidthInv(pKF->mfGridElementWidthInv),
+      mfGridElementHeightInv(pKF->mfGridElementHeightInv),
+      fx(pKF->fx),
+      fy(pKF->fy),
+      cx(pKF->cx),
+      cy(pKF->cy),
+      invfx(pKF->invfx),
+      invfy(pKF->invfy),
+      mbf(pKF->mbf),
+      mb(pKF->mb),
+      mThDepth(pKF->mThDepth),
+      mDistCoef(pKF->mDistCoef.clone()),
+      N(pKF->N),
+      mvKeys(pKF->mvKeys),
+      mvKeysUn(pKF->mvKeysUn),
+      mvuRight(pKF->mvuRight),
+      mvDepth(pKF->mvDepth),
+      mDescriptors(pKF->mDescriptors.clone()),
+      mBowVec(pKF->mBowVec),
+      mFeatVec(pKF->mFeatVec),
+      mTcp(pKF->mTcp),
+      mnScaleLevels(pKF->mnScaleLevels),
+      mfScaleFactor(pKF->mfScaleFactor),
+      mfLogScaleFactor(pKF->mfLogScaleFactor),
+      mvScaleFactors(pKF->mvScaleFactors),
+      mvLevelSigma2(pKF->mvLevelSigma2),
+      mvInvLevelSigma2(pKF->mvInvLevelSigma2),
+      mnMinX(pKF->mnMinX),
+      mnMinY(pKF->mnMinY),
+      mnMaxX(pKF->mnMaxX),
+      mnMaxY(pKF->mnMaxY),
+      mPrevKF(pKF->mPrevKF),
+      mNextKF(pKF->mNextKF),
+    //   mpImuPreintegrated(pKF->mpImuPreintegrated),
+      mImuCalib(pKF->mImuCalib),
+      mnOriginMapId(pKF->mnOriginMapId),
+      mNameFile(pKF->mNameFile),
+      mnDataset(pKF->mnDataset),
+      mvpLoopCandKFs(pKF->mvpLoopCandKFs),
+      mvpMergeCandKFs(pKF->mvpMergeCandKFs),
+      mTcw(pKF->mTcw),
+      mRcw(pKF->mRcw),
+      mTwc(pKF->mTwc),
+      mRwc(pKF->mRwc),
+      mOwb(pKF->mOwb),
+      mVw(pKF->mVw),
+      mbHasVelocity(pKF->mbHasVelocity),
+      mTlr(pKF->mTlr),
+      mTrl(pKF->mTrl),
+      mImuBias(pKF->mImuBias),
+      mvpMapPoints(pKF->mvpMapPoints),
+      mvBackupMapPointsId(pKF->mvBackupMapPointsId),
+      mpKeyFrameDB(pKF->mpKeyFrameDB),
+      mpORBvocabulary(pKF->mpORBvocabulary),
+      mConnectedKeyFrameWeights(pKF->mConnectedKeyFrameWeights),
+      mvpOrderedConnectedKeyFrames(pKF->mvpOrderedConnectedKeyFrames),
+      mvOrderedWeights(pKF->mvOrderedWeights),
+      mBackupConnectedKeyFrameIdWeights(pKF->mBackupConnectedKeyFrameIdWeights),
+      mbFirstConnection(pKF->mbFirstConnection),
+      mpParent(pKF->mpParent),
+      mspChildrens(pKF->mspChildrens),
+      mspLoopEdges(pKF->mspLoopEdges),
+      mspMergeEdges(pKF->mspMergeEdges),
+      mBackupParentId(pKF->mBackupParentId),
+      mvBackupChildrensId(pKF->mvBackupChildrensId),
+      mvBackupLoopEdgesId(pKF->mvBackupLoopEdgesId),
+      mvBackupMergeEdgesId(pKF->mvBackupMergeEdgesId),
+      mbNotErase(pKF->mbNotErase),
+      mbToBeErased(pKF->mbToBeErased),
+      mbBad(pKF->mbBad),
+      mHalfBaseline(pKF->mHalfBaseline),
+      mpMap(pKF->mpMap),
+      mBackupPrevKFId(pKF->mBackupPrevKFId),
+      mBackupNextKFId(pKF->mBackupNextKFId),
+    //   mBackupImuPreintegrated(pKF->mBackupImuPreintegrated),
+      mnBackupIdCamera(pKF->mnBackupIdCamera),
+      mnBackupIdCamera2(pKF->mnBackupIdCamera2),
+      mK_(pKF->mK_),
+      mpCamera(pKF->mpCamera),
+      mpCamera2(pKF->mpCamera2),
+      mvLeftToRightMatch(pKF->mvLeftToRightMatch),
+      mvRightToLeftMatch(pKF->mvRightToLeftMatch),
+      mvKeysRight(pKF->mvKeysRight),
+      NLeft(pKF->NLeft),
+      NRight(pKF->NRight)
+{
+    mnId=pKF->mnId;
+
+    mGrid=pKF->mGrid;
+
+    SetPose(pKF->GetPose());
+}
+// ========== CARV ==========
+
 } //namespace ORB_SLAM

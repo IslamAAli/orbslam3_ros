@@ -126,6 +126,17 @@ Eigen::Vector3f MapPoint::GetWorldPos() {
     return mWorldPos;
 }
 
+// ========== CARV ==========
+cv::Mat MapPoint::GetWorldPosCV() {
+    unique_lock<mutex> lock(mMutexPos);
+    // Create a cv::Mat and set its values
+    cv::Mat mat(3, 1, CV_32F);
+    mat.at<float>(0, 0) = mWorldPos.x();
+    mat.at<float>(1, 0) = mWorldPos.y();
+    mat.at<float>(2, 0) = mWorldPos.z();
+    return mat;
+}
+// ========== CARV ==========
 Eigen::Vector3f MapPoint::GetNormal() {
     unique_lock<mutex> lock(mMutexPos);
     return mNormalVector;

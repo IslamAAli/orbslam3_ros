@@ -283,6 +283,13 @@ public:
         return pKF1->mnId<pKF2->mnId;
     }
 
+    // ========== CARV ==========
+    //carv:: new methods
+    cv::Point2f ProjectPointOnCamera(cv::Mat Pw);
+    cv::Mat TransformPointWtoC(cv::Mat Pw);
+    KeyFrame(KeyFrame* pKF);
+    // ========== CARV ==========
+
     Map* GetMap();
     void UpdateMap(Map* pMap);
 
