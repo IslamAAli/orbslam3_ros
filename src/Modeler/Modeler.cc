@@ -121,8 +121,8 @@ namespace ORB_SLAM3 {
 
         {
             unique_lock<mutex> lock(mMutexTranscript);
-            // KeyFrame* pKFcopy = new KeyFrame(pKF);
-            // mTranscriptInterface.addKeyFrameInsertionWithLinesEntry(pKF,pKFcopy,vPOnLine);
+            KeyFrame* pKFcopy = new KeyFrame(pKF);
+            mTranscriptInterface.addKeyFrameInsertionWithLinesEntry(pKF,pKFcopy,vPOnLine);
         }
 
         pKF->SetErase();
