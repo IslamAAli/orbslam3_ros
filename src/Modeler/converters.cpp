@@ -6,6 +6,7 @@
 namespace CARV_HELPERS
 {
     cv::Mat se3ToCvMat(const Sophus::SE3<float>& se3) {
+        cout << "Called se3ToCvMat " << endl;
         // Extract rotation matrix and translation vector
         Eigen::Matrix3f R = se3.rotationMatrix();
         Eigen::Vector3f t = se3.translation();
@@ -24,11 +25,12 @@ namespace CARV_HELPERS
         for (int i = 0; i < 3; ++i) {
             cvTransform.at<float>(i, 3) = t(i);
         }
-
+        cout << "Return se3ToCvMat : " << cvTransform << endl;
         return cvTransform;
     }
 
     cv::Mat vector3fToCvMat(const Eigen::Vector3f& vector) {
+        cout << "Called vector3fToCvMat " << endl;
         // Create cv::Mat with 1 row, 3 columns, and CV_32F type
         cv::Mat cvMat(1, 3, CV_32F);
 
@@ -37,10 +39,12 @@ namespace CARV_HELPERS
         cvMat.at<float>(0, 1) = vector(1);
         cvMat.at<float>(0, 2) = vector(2);
 
+        cout << "Return vector3fToCvMat : " << cvMat << endl;
         return cvMat;
     }
 
     Eigen::Vector3f matToEigenVector3f(const cv::Mat& mat) {
+        cout << "Called matToEigenVector3f " << endl;
         Eigen::Vector3f eigenVec;
 
         if (mat.rows == 3 && mat.cols == 1 && mat.type() == CV_32F) {
@@ -51,6 +55,7 @@ namespace CARV_HELPERS
             throw std::invalid_argument("Input cv::Mat is not a 3x1 matrix of type CV_32F");
         }
 
+        cout << "Return matToEigenVector3f : " << cvMat << endl;
         return eigenVec;
     }
 }

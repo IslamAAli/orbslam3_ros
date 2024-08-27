@@ -1219,6 +1219,104 @@ cv::Point2f KeyFrame::ProjectPointOnCamera(cv::Mat Pw){
 
 // KeyFrame::KeyFrame(KeyFrame *pKF){}
 //TODO: Check this constructor is it covering everything or not
+// KeyFrame::KeyFrame(KeyFrame *pKF): 
+//       mnId(pKF->mnId), 
+//       mnFrameId(pKF->mnFrameId),
+//       mTimeStamp(pKF->mTimeStamp),
+//       mnGridCols(pKF->mnGridCols),
+//       mnGridRows(pKF->mnGridRows),
+//       mfGridElementWidthInv(pKF->mfGridElementWidthInv),
+//       mfGridElementHeightInv(pKF->mfGridElementHeightInv),
+//       fx(pKF->fx),
+//       fy(pKF->fy),
+//       cx(pKF->cx),
+//       cy(pKF->cy),
+//       invfx(pKF->invfx),
+//       invfy(pKF->invfy),
+//       mbf(pKF->mbf),
+//       mb(pKF->mb),
+//       mThDepth(pKF->mThDepth),
+//       mDistCoef(pKF->mDistCoef.clone()),
+//       N(pKF->N),
+//       mvKeys(pKF->mvKeys),
+//       mvKeysUn(pKF->mvKeysUn),
+//       mvuRight(pKF->mvuRight),
+//       mvDepth(pKF->mvDepth),
+//       mDescriptors(pKF->mDescriptors.clone()),
+//       mBowVec(pKF->mBowVec),
+//       mFeatVec(pKF->mFeatVec),
+//       mTcp(pKF->mTcp),
+//       mnScaleLevels(pKF->mnScaleLevels),
+//       mfScaleFactor(pKF->mfScaleFactor),
+//       mfLogScaleFactor(pKF->mfLogScaleFactor),
+//       mvScaleFactors(pKF->mvScaleFactors),
+//       mvLevelSigma2(pKF->mvLevelSigma2),
+//       mvInvLevelSigma2(pKF->mvInvLevelSigma2),
+//       mnMinX(pKF->mnMinX),
+//       mnMinY(pKF->mnMinY),
+//       mnMaxX(pKF->mnMaxX),
+//       mnMaxY(pKF->mnMaxY),
+//       mPrevKF(pKF->mPrevKF),
+//       mNextKF(pKF->mNextKF),
+//     //   mpImuPreintegrated(pKF->mpImuPreintegrated),
+//       mImuCalib(pKF->mImuCalib),
+//       mnOriginMapId(pKF->mnOriginMapId),
+//       mNameFile(pKF->mNameFile),
+//       mnDataset(pKF->mnDataset),
+//       mvpLoopCandKFs(pKF->mvpLoopCandKFs),
+//       mvpMergeCandKFs(pKF->mvpMergeCandKFs),
+//       mTcw(pKF->mTcw),
+//       mRcw(pKF->mRcw),
+//       mTwc(pKF->mTwc),
+//       mRwc(pKF->mRwc),
+//       mOwb(pKF->mOwb),
+//       mVw(pKF->mVw),
+//       mbHasVelocity(pKF->mbHasVelocity),
+//       mTlr(pKF->mTlr),
+//       mTrl(pKF->mTrl),
+//       mImuBias(pKF->mImuBias),
+//       mvpMapPoints(pKF->mvpMapPoints),
+//       mvBackupMapPointsId(pKF->mvBackupMapPointsId),
+//       mpKeyFrameDB(pKF->mpKeyFrameDB),
+//       mpORBvocabulary(pKF->mpORBvocabulary),
+//       mConnectedKeyFrameWeights(pKF->mConnectedKeyFrameWeights),
+//       mvpOrderedConnectedKeyFrames(pKF->mvpOrderedConnectedKeyFrames),
+//       mvOrderedWeights(pKF->mvOrderedWeights),
+//       mBackupConnectedKeyFrameIdWeights(pKF->mBackupConnectedKeyFrameIdWeights),
+//       mbFirstConnection(pKF->mbFirstConnection),
+//       mpParent(pKF->mpParent),
+//       mspChildrens(pKF->mspChildrens),
+//       mspLoopEdges(pKF->mspLoopEdges),
+//       mspMergeEdges(pKF->mspMergeEdges),
+//       mBackupParentId(pKF->mBackupParentId),
+//       mvBackupChildrensId(pKF->mvBackupChildrensId),
+//       mvBackupLoopEdgesId(pKF->mvBackupLoopEdgesId),
+//       mvBackupMergeEdgesId(pKF->mvBackupMergeEdgesId),
+//       mbNotErase(pKF->mbNotErase),
+//       mbToBeErased(pKF->mbToBeErased),
+//       mbBad(pKF->mbBad),
+//       mHalfBaseline(pKF->mHalfBaseline),
+//       mpMap(pKF->mpMap),
+//       mBackupPrevKFId(pKF->mBackupPrevKFId),
+//       mBackupNextKFId(pKF->mBackupNextKFId),
+//     //   mBackupImuPreintegrated(pKF->mBackupImuPreintegrated),
+//       mnBackupIdCamera(pKF->mnBackupIdCamera),
+//       mnBackupIdCamera2(pKF->mnBackupIdCamera2),
+//       mK_(pKF->mK_),
+//       mpCamera(pKF->mpCamera),
+//       mpCamera2(pKF->mpCamera2),
+//       mvLeftToRightMatch(pKF->mvLeftToRightMatch),
+//       mvRightToLeftMatch(pKF->mvRightToLeftMatch),
+//       mvKeysRight(pKF->mvKeysRight),
+//       NLeft(pKF->NLeft),
+//       NRight(pKF->NRight)
+// {
+//     mnId=pKF->mnId;
+
+//     mGrid=pKF->mGrid;
+
+//     SetPose(pKF->GetPose());
+// }
 KeyFrame::KeyFrame(KeyFrame *pKF): 
       mnId(pKF->mnId), 
       mnFrameId(pKF->mnFrameId),
@@ -1236,14 +1334,14 @@ KeyFrame::KeyFrame(KeyFrame *pKF):
       mbf(pKF->mbf),
       mb(pKF->mb),
       mThDepth(pKF->mThDepth),
-      mDistCoef(pKF->mDistCoef.clone()),
+      mDistCoef(pKF->mDistCoef.clone()),  // Deep copy of matrix
       N(pKF->N),
-      mvKeys(pKF->mvKeys),
-      mvKeysUn(pKF->mvKeysUn),
+      mvKeys(pKF->mvKeys), 
+      mvKeysUn(pKF->mvKeysUn), 
       mvuRight(pKF->mvuRight),
       mvDepth(pKF->mvDepth),
-      mDescriptors(pKF->mDescriptors.clone()),
-      mBowVec(pKF->mBowVec),
+      mDescriptors(pKF->mDescriptors.clone()), // Deep copy of matrix
+      mBowVec(pKF->mBowVec), 
       mFeatVec(pKF->mFeatVec),
       mTcp(pKF->mTcp),
       mnScaleLevels(pKF->mnScaleLevels),
@@ -1256,9 +1354,8 @@ KeyFrame::KeyFrame(KeyFrame *pKF):
       mnMinY(pKF->mnMinY),
       mnMaxX(pKF->mnMaxX),
       mnMaxY(pKF->mnMaxY),
-      mPrevKF(pKF->mPrevKF),
-      mNextKF(pKF->mNextKF),
-    //   mpImuPreintegrated(pKF->mpImuPreintegrated),
+      mPrevKF(pKF->mPrevKF), // Pointer - shallow copy
+      mNextKF(pKF->mNextKF), // Pointer - shallow copy
       mImuCalib(pKF->mImuCalib),
       mnOriginMapId(pKF->mnOriginMapId),
       mNameFile(pKF->mNameFile),
@@ -1275,16 +1372,16 @@ KeyFrame::KeyFrame(KeyFrame *pKF):
       mTlr(pKF->mTlr),
       mTrl(pKF->mTrl),
       mImuBias(pKF->mImuBias),
-      mvpMapPoints(pKF->mvpMapPoints),
+      mvpMapPoints(pKF->mvpMapPoints), // Pointer-based members shallow copied
       mvBackupMapPointsId(pKF->mvBackupMapPointsId),
-      mpKeyFrameDB(pKF->mpKeyFrameDB),
-      mpORBvocabulary(pKF->mpORBvocabulary),
+      mpKeyFrameDB(pKF->mpKeyFrameDB), // Pointer - shallow copy
+      mpORBvocabulary(pKF->mpORBvocabulary), // Pointer - shallow copy
       mConnectedKeyFrameWeights(pKF->mConnectedKeyFrameWeights),
       mvpOrderedConnectedKeyFrames(pKF->mvpOrderedConnectedKeyFrames),
       mvOrderedWeights(pKF->mvOrderedWeights),
       mBackupConnectedKeyFrameIdWeights(pKF->mBackupConnectedKeyFrameIdWeights),
       mbFirstConnection(pKF->mbFirstConnection),
-      mpParent(pKF->mpParent),
+      mpParent(pKF->mpParent), // Pointer - shallow copy
       mspChildrens(pKF->mspChildrens),
       mspLoopEdges(pKF->mspLoopEdges),
       mspMergeEdges(pKF->mspMergeEdges),
@@ -1296,27 +1393,27 @@ KeyFrame::KeyFrame(KeyFrame *pKF):
       mbToBeErased(pKF->mbToBeErased),
       mbBad(pKF->mbBad),
       mHalfBaseline(pKF->mHalfBaseline),
-      mpMap(pKF->mpMap),
+      mpMap(pKF->mpMap), // Pointer - shallow copy
       mBackupPrevKFId(pKF->mBackupPrevKFId),
       mBackupNextKFId(pKF->mBackupNextKFId),
-    //   mBackupImuPreintegrated(pKF->mBackupImuPreintegrated),
       mnBackupIdCamera(pKF->mnBackupIdCamera),
       mnBackupIdCamera2(pKF->mnBackupIdCamera2),
       mK_(pKF->mK_),
-      mpCamera(pKF->mpCamera),
-      mpCamera2(pKF->mpCamera2),
+      mpCamera(pKF->mpCamera), // Pointer - shallow copy
+      mpCamera2(pKF->mpCamera2), // Pointer - shallow copy
       mvLeftToRightMatch(pKF->mvLeftToRightMatch),
       mvRightToLeftMatch(pKF->mvRightToLeftMatch),
       mvKeysRight(pKF->mvKeysRight),
       NLeft(pKF->NLeft),
       NRight(pKF->NRight)
 {
-    mnId=pKF->mnId;
+    // Direct assignment of non-trivially copied members
+    mGrid = pKF->mGrid;  // Direct copy - assumes mGrid is of a type that handles copying correctly
 
-    mGrid=pKF->mGrid;
-
-    SetPose(pKF->GetPose());
+    // Pose needs to be set explicitly using an appropriate function to handle internal updates
+    SetPose(pKF->GetPose()); // Ensures that the pose is correctly initialized with necessary internal consistency
 }
+
 // ========== CARV ==========
 
 } //namespace ORB_SLAM
