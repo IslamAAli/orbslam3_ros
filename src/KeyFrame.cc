@@ -1217,7 +1217,7 @@ cv::Point2f KeyFrame::ProjectPointOnCamera(cv::Mat Pw){
     return xy;
 }
 
-KeyFrame::KeyFrame(KeyFrame *pKF){}
+// KeyFrame::KeyFrame(KeyFrame *pKF){}
 //TODO: Check this constructor is it covering everything or not
 // KeyFrame::KeyFrame(KeyFrame *pKF): 
 //       mnId(pKF->mnId), 
