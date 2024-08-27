@@ -202,6 +202,9 @@ RUN mkdir -p ~/SLAM && \
 	cd ~/SLAM && \
 	git clone https://github.com/IslamAAli/orbslam3_ros.git && \
 	cd orbslam3_ros && \
+	git checkout -b CARV && \
+	git branch --set-upstream-to=origin/CARV CARV && \
+	git pull && \
 	chmod +x build.sh && \
 	./build.sh   
 
