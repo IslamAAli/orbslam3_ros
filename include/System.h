@@ -83,6 +83,12 @@ class LocalMapping;
 class LoopClosing;
 class Settings;
 
+// ========== CARV ==========
+//CARV: Modeler class
+class Modeler;
+class ModelDrawer;
+// ========== CARV ==========
+
 class System
 {
 public:
