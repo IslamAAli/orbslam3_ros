@@ -38,6 +38,11 @@ class KeyFrame;
 class Atlas;
 class KeyFrameDatabase;
 
+// ========== CARV ==========
+// carv: declaration
+class Modeler;
+// ========== CARV ==========
+
 class Map
 {
     friend class boost::serialization::access;

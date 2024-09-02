@@ -19,6 +19,11 @@
 
 #include "Map.h"
 
+// ========== CARV ==========
+// carv: include modeler to delete points and keyframes
+#include "Modeler/Modeler.h"
+// ========== CARV ==========
+
 #include<mutex>
 
 namespace ORB_SLAM3
@@ -75,6 +80,11 @@ void Map::AddKeyFrame(KeyFrame *pKF)
     {
         mpKFlowerID = pKF;
     }
+
+    // ========== CARV ==========
+    std::cout<<"new key frame inserted! now count: "<< mspKeyFrames.size()<<std::endl;
+    newestKeyFrame = pKF;
+    // ========== CARV ==========
 }
 
 void Map::AddMapPoint(MapPoint *pMP)
@@ -102,6 +112,11 @@ void Map::EraseMapPoint(MapPoint *pMP)
 
     // TODO: This only erase the pointer.
     // Delete the MapPoint
+
+    // ========== CARV ==========
+    //carv: remove point in modeler
+    mpModeler->AddDeletePointEntry(pMP);
+    // ========== CARV ==========
 }
 
 void Map::EraseKeyFrame(KeyFrame *pKF)
