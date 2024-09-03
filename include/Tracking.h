@@ -42,6 +42,12 @@
 #include <mutex>
 #include <unordered_set>
 
+// ========== CARV ==========
+//CARV: include modeler classes
+#include "Modeler/Modeler.h"
+#include "Modeler/ModelDrawer.h"
+// ========== CARV ==========
+
 namespace ORB_SLAM3
 {
 
@@ -52,6 +58,12 @@ class LocalMapping;
 class LoopClosing;
 class System;
 class Settings;
+
+// ========== CARV ==========
+//CARV: Modeler class
+class Modeler;
+class ModelDrawer;
+// ========== CARV ==========
 
 class Tracking
 {  
@@ -107,6 +119,11 @@ public:
     void SaveSubTrajectory(string strNameFile_frames, string strNameFile_kf, Map* pMap);
 
     float GetImageScale();
+
+    // ========== CARV ==========
+    //CARV: set Modeler thread pointer
+    void SetModeler(Modeler* pModeler);
+    // ========== CARV ==========
 
 #ifdef REGISTER_LOOP
     void RequestStop();
@@ -356,6 +373,11 @@ protected:
     Sophus::SE3f mTlr;
 
     void newParameterLoader(Settings* settings);
+
+    // ========== CARV ==========
+    //CARV: Modeling thread pointer
+    Modeler* mpModeler;
+    // ========== CARV ==========
 
 #ifdef REGISTER_LOOP
     bool Stop();

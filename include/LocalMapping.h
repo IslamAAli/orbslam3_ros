@@ -29,6 +29,9 @@
 
 #include <mutex>
 
+// ========== CARV ==========
+#include "Modeler/Modeler.h"
+// ========== CARV ==========
 
 namespace ORB_SLAM3
 {
@@ -37,6 +40,9 @@ class System;
 class Tracking;
 class LoopClosing;
 class Atlas;
+// ========== CARV ==========
+class Modeler;
+// ========== CARV ==========
 
 class LocalMapping
 {
@@ -47,6 +53,11 @@ public:
     void SetLoopCloser(LoopClosing* pLoopCloser);
 
     void SetTracker(Tracking* pTracker);
+
+    // ========== CARV ==========
+    //CARV: set modeler pointer
+    void SetModeler(Modeler* pModeler); 
+    // ========== CARV ==========
 
     // Main function
     void Run();

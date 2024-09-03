@@ -1439,6 +1439,14 @@ void Tracking::SetViewer(Viewer *pViewer)
     mpViewer=pViewer;
 }
 
+// ========== CARV ==========
+//CARV: set modeler pointer
+void Tracking::SetModeler(Modeler *pModeler)
+{
+    mpModeler=pModeler;
+}
+// ========== CARV ==========
+
 void Tracking::SetStepByStep(bool bSet)
 {
     bStepByStep = bSet;
@@ -1610,6 +1618,15 @@ Sophus::SE3f Tracking::GrabImageMonocular(const cv::Mat &im, const double &times
 
     lastID = mCurrentFrame.mnId;
     Track();
+
+    // ========== CARV ==========
+    //CARV: aquire rgb image and frameid
+    if(mState==OK){
+        cv::Mat imu;
+        cv::undistort(im,imu,mK,mDistCoef);
+        mpModeler->AddFrameImage(mCurrentFrame.mnId, imu);
+    }
+    // ========== CARV ==========
 
     return mCurrentFrame.GetPose();
 }

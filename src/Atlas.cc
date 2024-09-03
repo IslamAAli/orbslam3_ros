@@ -23,6 +23,11 @@
 #include "Pinhole.h"
 #include "KannalaBrandt8.h"
 
+// ========== CARV ==========
+// carv: include modeler to delete points and keyframes
+#include "Modeler/Modeler.h"
+// ========== CARV ==========
+
 namespace ORB_SLAM3
 {
 
@@ -74,6 +79,11 @@ void Atlas::CreateNewMap()
     mpCurrentMap = new Map(mnLastInitKFidMap);
     mpCurrentMap->SetCurrentMap();
     mspMaps.insert(mpCurrentMap);
+
+    // ========== CARV ==========
+    // carv: set the modeler inside atlas so that it is distributed to different maps
+    mpCurrentMap->SetModeler(mpModeler);
+    // ========== CARV ==========
 }
 
 void Atlas::ChangeMap(Map* pMap)

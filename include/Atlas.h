@@ -139,6 +139,14 @@ public:
 
     long unsigned int GetNumLivedMP();
 
+    // ========== CARV ==========
+    // carv: pointer to modeler
+    Modeler* mpModeler;
+    void SetModeler(Modeler* pModeler){
+        mpModeler = pModeler;
+    }
+    // ========== CARV ==========
+
 protected:
 
     std::set<Map*> mspMaps;

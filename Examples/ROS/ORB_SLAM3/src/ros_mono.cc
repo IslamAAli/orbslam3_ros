@@ -140,7 +140,7 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
       }
     }
     std_msgs::String msgScript;  //publish CARV model scripts
-   // msgScript.data = mpSLAM->mpModeler->mTranscriptInterface.m_SFMTranscript.getNewCommand();
-   // if(msgScript.data !="")
-   //   pubCARVScripts.publish(msgScript);
+  //  msgScript.data = mpSLAM->mpModeler->mTranscriptInterface.m_SFMTranscript.getNewCommand();
+  //  if(msgScript.data !="")
+  //    pubCARVScripts.publish(msgScript);
 }

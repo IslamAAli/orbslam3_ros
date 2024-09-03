@@ -115,7 +115,7 @@ void Map::EraseMapPoint(MapPoint *pMP)
 
     // ========== CARV ==========
     //carv: remove point in modeler
-    //mpModeler->AddDeletePointEntry(pMP);
+    mpModeler->AddDeletePointEntry(pMP);
     // ========== CARV ==========
 }
 

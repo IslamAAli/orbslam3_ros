@@ -185,6 +185,11 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     mpFrameDrawer = new FrameDrawer(mpAtlas);
     mpMapDrawer = new MapDrawer(mpAtlas, strSettingsFile, settings_);
 
+    // ========== CARV ==========
+    //CARV: modeldrawer
+    mpModelDrawer = new ModelDrawer();
+    // ========== CARV ==========
+
     //Initialize the Tracking thread
     //(it will live in the main thread of execution, the one that called this constructor)
     cout << "Seq. Name: " << strSequence << endl;
@@ -213,6 +218,12 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     mpLoopCloser = new LoopClosing(mpAtlas, mpKeyFrameDatabase, mpVocabulary, mSensor!=MONOCULAR, activeLC); // mSensor!=MONOCULAR);
     mptLoopClosing = new thread(&ORB_SLAM3::LoopClosing::Run, mpLoopCloser);
 
+    // ========== CARV ==========
+    //CARV: Initialize the Modeler thread and launch
+    mpModeler = new Modeler(mpModelDrawer);
+    mptModeler = new thread(&ORB_SLAM3::Modeler::Run, mpModeler);
+    // ========== CARV ==========
+
     //Set pointers between threads
     mpTracker->SetLocalMapper(mpLocalMapper);
     mpTracker->SetLoopClosing(mpLoopCloser);
@@ -229,12 +240,21 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     if(bUseViewer)
     //if(false) // TODO
     {
-        mpViewer = new Viewer(this, mpFrameDrawer,mpMapDrawer,mpTracker,strSettingsFile,settings_);
+        mpViewer = new Viewer(this, mpFrameDrawer,mpMapDrawer, mpModelDrawer, mpTracker,strSettingsFile,settings_);
         mptViewer = new thread(&Viewer::Run, mpViewer);
         mpTracker->SetViewer(mpViewer);
         mpLoopCloser->mpViewer = mpViewer;
         mpViewer->both = mpFrameDrawer->both;
     }
+
+    // ========== CARV ==========
+    //CARV: set pointer of modeler
+    mpAtlas->SetModeler(mpModeler);
+    mpTracker->SetModeler(mpModeler);
+    mpLocalMapper->SetModeler(mpModeler);
+    mpModelDrawer->SetModeler(mpModeler);
+    // ========== CARV ==========
+
 
     // Fix verbosity
     Verbose::SetTh(Verbose::VERBOSITY_QUIET);
@@ -523,6 +543,10 @@ void System::Shutdown()
 
     mpLocalMapper->RequestFinish();
     mpLoopCloser->RequestFinish();
+
+    // ============== CARV ================
+    mpModeler->RequestFinish();
+    // ============== CARV ================
     /*if(mpViewer)
     {
         mpViewer->RequestFinish();

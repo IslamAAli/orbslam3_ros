@@ -61,6 +61,14 @@ void LocalMapping::SetTracker(Tracking *pTracker)
     mpTracker=pTracker;
 }
 
+// ========== CARV ==========
+//CARV: set modeler pointer
+void LocalMapping::SetModeler(Modeler *pModeler)
+{
+    mpModeler=pModeler;
+}
+// ========== CARV ==========
+
 void LocalMapping::Run()
 {
     mbFinished = false;
@@ -248,6 +256,11 @@ void LocalMapping::Run()
 #endif
 
             mpLoopCloser->InsertKeyFrame(mpCurrentKeyFrame);
+
+            // ========== CARV ==========
+            //CARV: add keyframe to transcript queue
+            mpModeler->AddKeyFrameEntry(mpCurrentKeyFrame);
+            // ========== CARV ==========
 
 #ifdef REGISTER_TIMES
             std::chrono::steady_clock::time_point time_EndLocalMap = std::chrono::steady_clock::now();
