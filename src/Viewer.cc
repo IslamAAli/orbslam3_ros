@@ -24,11 +24,18 @@
 
 namespace ORB_SLAM3
 {
-
-Viewer::Viewer(System* pSystem, FrameDrawer *pFrameDrawer, MapDrawer *pMapDrawer, Tracking *pTracking, const string &strSettingPath, Settings* settings):
-    both(false), mpSystem(pSystem), mpFrameDrawer(pFrameDrawer),mpMapDrawer(pMapDrawer), mpTracker(pTracking),
+// ========== CARV ==========
+// carv initialize with modeldrawer
+Viewer::Viewer(System* pSystem, FrameDrawer *pFrameDrawer, MapDrawer *pMapDrawer, ModelDrawer* pModelDrawer, Tracking *pTracking, const string &strSettingPath, Settings* settings):
+    both(false), mpSystem(pSystem), mpFrameDrawer(pFrameDrawer),mpMapDrawer(pMapDrawer), mpModelDrawer(pModelDrawer), mpTracker(pTracking),
     mbFinishRequested(false), mbFinished(true), mbStopped(true), mbStopRequested(false)
+// ========== CARV ==========
 {
+    // ========== CARV ==========
+    SettingPath = strSettingPath;
+    // ========== CARV ==========
+
+
     if(settings){
         newParameterLoader(settings);
     }
@@ -72,6 +79,18 @@ void Viewer::newParameterLoader(Settings *settings) {
     mViewpointY = settings->viewPointY();
     mViewpointZ = settings->viewPointZ();
     mViewpointF = settings->viewPointF();
+
+    // ========== CARV ==========
+    // carv params
+    cv::FileStorage fSettings(SettingPath, cv::FileStorage::READ);
+    mfx = fSettings["Camera.fx"];
+    mfy = fSettings["Camera.fy"];
+    mcx = fSettings["Camera.cx"];
+    mcy = fSettings["Camera.cy"];
+
+    int nRGB = fSettings["Camera.RGB"];
+    mbRGB = nRGB;
+    // ========== CARV ==========
 }
 
 bool Viewer::ParseViewerParamFile(cv::FileStorage &fSettings)

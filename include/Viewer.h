@@ -28,6 +28,9 @@
 
 #include <mutex>
 
+// carv include
+#include "Modeler/ModelDrawer.h"
+
 namespace ORB_SLAM3
 {
 
@@ -37,11 +40,20 @@ class MapDrawer;
 class System;
 class Settings;
 
+// ========== CARV ==========
+// carv class declaration
+class ModelDrawer;
+// ========== CARV ==========
+
 class Viewer
 {
 public:
+    // ========== CARV ==========
+    // carv initialize with modeldrawer
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    Viewer(System* pSystem, FrameDrawer* pFrameDrawer, MapDrawer* pMapDrawer, Tracking *pTracking, const string &strSettingPath, Settings* settings);
+    Viewer(System* pSystem, FrameDrawer* pFrameDrawer, MapDrawer* pMapDrawer,  ModelDrawer* pModelDrawer, 
+                    Tracking *pTracking, const string &strSettingPath, Settings* settings);
+    // ========== CARV ==========
 
     void newParameterLoader(Settings* settings);
 
@@ -93,6 +105,14 @@ private:
     std::mutex mMutexStop;
 
     bool mbStopTrack;
+
+    // ========== CARV ==========
+    // carv modeldrawer pointer and variables
+    ModelDrawer* mpModelDrawer;
+    float mfx, mfy, mcx, mcy;
+    bool mbRGB;
+    string SettingPath;
+    // ========== CARV ==========
 
 };
 
