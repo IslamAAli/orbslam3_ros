@@ -881,10 +881,12 @@ namespace ORB_SLAM3
 
             vCosParallax.push_back(cosParallax);
             vP3D[vMatches12[i].first] = cv::Point3f(p3dC1(0), p3dC1(1), p3dC1(2));
-            nGood++;
+            
 
-            if(cosParallax<0.99998)
+            if(cosParallax<0.99998){
                 vbGood[vMatches12[i].first]=true;
+                nGood++;
+            }
         }
 
         if(nGood>0)
