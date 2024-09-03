@@ -27,12 +27,19 @@ rosrun ORB_CARV_Pub Mono Vocabulary/ORBvoc.txt config_files/Flir_U3_23S3C_C_half
 # running CARV with usb web camera on robot
 rosrun ORB_CARV_Pub Mono Vocabulary/ORBvoc.txt config_files/Logitech_c270_HD720p.yaml /camera/image_raw:=/usb_cam/image_raw
 
+# run SLAM CARV in debugging with gdb
+rosrun --prefix 'gdb -ex run --args' ORB_CARV_Pub Mono Vocabulary/ORBvoc.txt config_files/Logitech_c270_HD720p.yaml /camera/image_raw:=/usb_cam/image_raw
+
+
+##################################################################
 # run master orb-slam3 original
 rosrun ORB_SLAM3 Mono Vocabulary/ORBvoc.txt config_files/Logitech_c270_HD720p.yaml /camera/image_raw:=/usb_cam/image_raw
 
+# run SLAM CARV in debugging with gdb
+rosrun --prefix 'gdb -ex run --args' ORB_SLAM3 Mono Vocabulary/ORBvoc.txt config_files/Logitech_c270_HD720p.yaml /camera/image_raw:=/usb_cam/image_raw
+##################################################################
 
-# run in debugging with gdb
-rosrun --prefix 'gdb -ex run --args' ORB_CARV_Pub Mono Vocabulary/ORBvoc.txt config_files/Logitech_c270_HD720p.yaml /camera/image_raw:=/usb_cam/image_raw
+
 
 # save edits to docker container 
 docker commit 8e33d8d6840a islamaali/orbslam3_ros-docker:v1.0
