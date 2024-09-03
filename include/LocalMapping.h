@@ -206,6 +206,11 @@ protected:
     //DEBUG
     ofstream f_lm;
 
+    // ========== CARV ==========
+    // CARV
+    Modeler* mpModeler;
+    // ========== CARV ==========
+
     };
 
 } //namespace ORB_SLAM
