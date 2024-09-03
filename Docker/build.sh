@@ -9,4 +9,5 @@ echo "> VERSION: 1.0"
 echo "========================================================================================================="
 
                                                                                                          
-docker build --no-cache --rm -t islamaali/orbslam3_ros-docker:v1.0 .
+# docker build --no-cache --rm -t islamaali/orbslam3_ros-docker:v1.0 .
+docker build --rm -t islamaali/orbslam3_ros-docker:v1.0 .
