@@ -34,3 +34,5 @@ rosrun ORB_SLAM3 Mono Vocabulary/ORBvoc.txt config_files/Logitech_c270_HD720p.ya
 # run in debugging with gdb
 rosrun --prefix 'gdb -ex run --args' ORB_CARV_Pub Mono Vocabulary/ORBvoc.txt config_files/Logitech_c270_HD720p.yaml /camera/image_raw:=/usb_cam/image_raw
 
+# save edits to docker container 
+docker commit 8e33d8d6840a islamaali/orbslam3_ros-docker:v1.0
