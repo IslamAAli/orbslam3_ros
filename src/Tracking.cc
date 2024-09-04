@@ -3812,6 +3812,12 @@ void Tracking::Reset(bool bLocMap)
         Verbose::PrintMess("done", Verbose::VERBOSITY_NORMAL);
     }
 
+    // ========== CARV ==========
+    // CARV: Reset Modeling
+    Verbose::PrintMess("Reseting Modeler...", Verbose::VERBOSITY_NORMAL);
+    mpModeler->RequestReset();
+    Verbose::PrintMess("done", Verbose::VERBOSITY_NORMAL);
+    // ========== CARV ==========
 
     // Reset Loop Closing
     Verbose::PrintMess("Reseting Loop Closing...", Verbose::VERBOSITY_NORMAL);

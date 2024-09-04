@@ -19,6 +19,11 @@
 #include "MapPoint.h"
 #include "ORBmatcher.h"
 
+// ========== CARV ==========
+// carv: include modeler to delete points and keyframes
+#include "Modeler/Modeler.h"
+// ========== CARV ==========
+
 #include<mutex>
 
 namespace ORB_SLAM3
@@ -137,6 +142,7 @@ cv::Mat MapPoint::GetWorldPosCV() {
     return mat;
 }
 // ========== CARV ==========
+
 Eigen::Vector3f MapPoint::GetNormal() {
     unique_lock<mutex> lock(mMutexPos);
     return mNormalVector;
@@ -198,6 +204,11 @@ void MapPoint::EraseObservation(KeyFrame* pKF)
 
             mObservations.erase(pKF);
 
+            // ========== CARV ==========
+            // carv: delete observation from modeler
+            mpMap->mpModeler->AddDeleteObservationEntry(pKF, this);
+            // ========== CARV ==========
+
             if(mpRefKF==pKF)
                 mpRefKF=mObservations.begin()->first;
 
@@ -232,7 +243,10 @@ void MapPoint::SetBadFlag()
         unique_lock<mutex> lock2(mMutexPos);
         mbBad=true;
         obs = mObservations;
-        mObservations.clear();
+        // ========== CARV ==========
+        if(!mObservations.empty())
+            mObservations.clear();
+        // ========== CARV ==========
     }
     for(map<KeyFrame*, tuple<int,int>>::iterator mit=obs.begin(), mend=obs.end(); mit!=mend; mit++)
     {

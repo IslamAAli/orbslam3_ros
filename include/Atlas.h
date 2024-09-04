@@ -43,6 +43,11 @@ class Frame;
 class KannalaBrandt8;
 class Pinhole;
 
+// ========== CARV ==========
+// carv: declaration
+class Modeler;
+// ========== CARV ==========
+
 //BOOST_CLASS_EXPORT_GUID(Pinhole, "Pinhole")
 //BOOST_CLASS_EXPORT_GUID(KannalaBrandt8, "KannalaBrandt8")
 
