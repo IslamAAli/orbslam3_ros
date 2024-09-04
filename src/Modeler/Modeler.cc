@@ -1359,6 +1359,7 @@ namespace ORB_SLAM3 {
         std::cout << "**** HERE **** " <<endl;
         unique_lock<mutex> lock(mMutexTranscript);
         mTranscriptInterface.addPointDeletionEntry(pMP);
+        std::cout << "==== THERE ==== " <<endl;
     }
 
     void Modeler::AddDeleteObservationEntry(KeyFrame *pKF, MapPoint *pMP) {
