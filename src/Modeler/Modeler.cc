@@ -10,6 +10,7 @@
 
 // Header files needed by EDLines
 #include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <string.h>
 #include <include/Modeler/Modeler.h>
@@ -1355,6 +1356,7 @@ namespace ORB_SLAM3 {
     }
 
     void Modeler::AddDeletePointEntry(MapPoint* pMP){
+        std::cout << "**** HERE **** " <<endl;
         unique_lock<mutex> lock(mMutexTranscript);
         mTranscriptInterface.addPointDeletionEntry(pMP);
     }
